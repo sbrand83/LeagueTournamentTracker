@@ -1,16 +1,22 @@
 (function(){
 
-    var app = angular.module("LeagueTournamentTracker", []);
+    var app = angular.module("LeagueTournamentTracker", ["ngRoute"]);
 
-    app.controller("NavbarController", function($scope){
-        $scope.currentTab = 1;
+    app.config(function($routeProvider) {
+        $routeProvider
+            .when('/home', {
+                templateUrl: 'views/home.html'
+            })
+            .when('/create-tournament', {
+                templateUrl: 'views/create-tournament.html',
+                controller: "CreateTournamentController"
+            })
+            .otherwise({
+                redirectTo: '/home'
+            });
+    });
 
-        $scope.isSelected = function(checkTab){
-            return this.currentTab === checkTab;
-        };
-
-        $scope.setSelected = function(tab){
-            $scope.currentTab = tab;
-        };
+    app.controller("CreateTournamentController", function(){
+        console.log("create-tournament");
     });
 })();

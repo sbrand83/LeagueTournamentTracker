@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -10,7 +11,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarController">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Username">
@@ -20,7 +21,12 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <h1>LOLTT</h1>
+    <ng-view></ng-view>
+
+
+    
+
+
 
 
     

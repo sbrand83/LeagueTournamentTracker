@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "angular": "^1.4.8",
+    "angular-route": "^1.4.8",
     "bootstrap": "^3.3.6",
     "express": "^4.13.3"
   },
@@ -16,8 +17,8 @@
     "type": "git",
     "url": "git+https://github.com/sbrand83/LeagueTournamentTracker.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Stefan Brand, Jenner Wile and Justin Willoughby",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sbrand83/LeagueTournamentTracker/issues"
   },
