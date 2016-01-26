@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treant Practice</title>
+
+    <link rel="stylesheet" href="../treant/Treant.css" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
+    <script src="../treant/vendor/raphael.js" type="text/javascript"></script>
+    <script src="../treant/Treant.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+    
+    <div id="tree-simple" style="width:335px;height:160px"></div>
+    
+    <div id="tree-script">
+        <script type="text/javascript">
+            simple_chart_config = {
+                chart: {
+                    container: "#tree-simple"
+                },
+
+                nodeStructure: {
+                    text: {
+                        name: "Parent node"
+                    },
+                    children: [
+                        {
+                            text: {
+                                name: "First child"
+                            }
+            },
+                        {
+                            text: {
+                                name: "Second child"
+                            }
+            }
+        ],
+                    connectors: {
+                        type: "step"
+                    },
+                    collapsable: true
+                }
+            };
+
+            var myChart = new Treant(simple_chart_config);
+        </script>
+    </div>
+    
+    
+
+</body>
+
+</html>
