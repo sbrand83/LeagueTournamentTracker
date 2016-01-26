@@ -3,3 +3,8 @@ body { padding-top: 70px; }
 #numTeamsInput {
     width: 20%;
 }
+
+#register-div {
+    width: 50%;
+    margin: auto;
+}
