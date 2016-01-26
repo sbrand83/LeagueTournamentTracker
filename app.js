@@ -16,7 +16,11 @@
             });
     });
 
-    app.controller("CreateTournamentController", function(){
+    app.controller("CreateTournamentController", function($scope){
         console.log("create-tournament");
+
+        $scope.getNumber = function(num) {
+            return new Array(num);   
+        };
     });
 })();

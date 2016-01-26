@@ -1,7 +1,17 @@
-<form name="create-tournament">
-    <h3>Number of Teams</h3>
-    <input type="number" min="2" step="1" placeholder="2" class="form-control" ng-model="numTeams">
-    {{numTeams}}
+<form name="create-tournament" role="form">
+    <div class="form-group">
+        <label>Number of Teams</label>
+        <input type="number" min="2" max="64" step="1" class="form-control" ng-init="numTeams=2" ng-model="numTeams" id="numTeamsInput">
+    </div>
+    
+    <div ng-repeat="i in getNumber(numTeams) track by $index" class="form-group form-inline">
+        <label>Team {{$index + 1}}:</label><br />
+        <span ng-repeat="p in getNumber(5) track by $index" class="form-group">
+            <label>Player {{$index + 1}}:</label>
+            <input type="text" placeholder="Enter player name" class="form-control">
+        </span>
+    </div>
+    
     <input type="submit" value="Create Tournament" class="btn btn-primary">
 </form>
 
