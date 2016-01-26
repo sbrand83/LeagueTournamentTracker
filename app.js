@@ -11,6 +11,10 @@
                 templateUrl: 'views/create-tournament.html',
                 controller: "CreateTournamentController"
             })
+            .when('/register', {
+                templateUrl: 'views/register.html'
+                //controller: "RegisterController"
+            })
             .otherwise({
                 redirectTo: '/home'
             });
@@ -23,4 +27,14 @@
             return new Array(num);   
         };
     });
+
+    app.controller('RegisterController', ['$http', 'DataSource', '$scope', function($http, DataSource, $scope){
+        console.log("register");
+
+        $scope.users = [];
+
+        DataSource.getData(function(data){
+            $scope.users = data;
+        });
+    }]);
 })();
