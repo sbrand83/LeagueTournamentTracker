@@ -5,6 +5,7 @@
     <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
     <script type="text/javascript" src="node_modules/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="services.js"></script>
     <script src="treant/vendor/raphael.js"></script>
     <script src="treant/Treant.min.js"></script>
 
@@ -15,14 +16,20 @@
 <body>
 
     <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Username">
-            <input type="password" class="form-control" placeholder="Password">
-            <button type="submit" class="btn btn-default">Login</button>
-            <button class="btn btn-default">Register</button>
-          </form>
-      </div><!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                <img src="Logo_small.png" alt="LOLTT Logo">
+                </a>
+                <h1 class="navbar-text">League of Legends Tournament Tracker</h1>
+            </div>
+            <form class="navbar-form navbar-right" ng-controller="RegisterController" >
+                <input type="text" class="form-control" placeholder="Username">
+                <input type="password" class="form-control" placeholder="Password">
+                <button type="submit" class="btn btn-default">Login</button>
+                <button class="btn btn-default" ng-click="redirectToRegister();">Register</button>
+            </form>
+        </div><!-- /.container-fluid -->
     </nav>
 
     <ng-view></ng-view>

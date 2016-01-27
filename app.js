@@ -1,6 +1,6 @@
 (function(){
 
-    var app = angular.module("LeagueTournamentTracker", ["ngRoute"]);
+    var app = angular.module("LeagueTournamentTracker", ["ngRoute", "data-services"]);
 
     app.config(function($routeProvider) {
         $routeProvider
@@ -12,8 +12,8 @@
                 controller: "CreateTournamentController"
             })
             .when('/register', {
-                templateUrl: 'views/register.html'
-                //controller: "RegisterController"
+                templateUrl: 'views/register.html',
+                controller: "RegisterController"
             })
             .otherwise({
                 redirectTo: '/home'
@@ -28,13 +28,21 @@
         };
     });
 
-    app.controller('RegisterController', ['$http', 'DataSource', '$scope', function($http, DataSource, $scope){
+    app.controller('RegisterController', ['$http', '$location', 'DataSource', '$scope', function($http, $location, DataSource, $scope){
         console.log("register");
 
         $scope.users = [];
 
         DataSource.getData(function(data){
             $scope.users = data;
+            console.log('controller getting data');
+            console.log(data);
         });
+
+        $scope.redirectToRegister = function(){
+            $location.url("/register");
+        };
+
     }]);
+    //['$http', '$location', 'DataSource', '$scope', 
 })();

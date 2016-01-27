@@ -12,9 +12,9 @@
         }
 
         print_r($users_json);
-        foreach ($users_json as $user) {
-            print $user;
-        }
+        // foreach ($users_json as $user) {
+        //     print $user;
+        // }
     }
 
 ?>
