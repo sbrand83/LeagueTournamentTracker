@@ -1,9 +1,28 @@
 <div id="register-div">
-    <form>
-        <input class="form-control" type="text" name="username" placeholder="Username">
-        <input class="form-control" type="password" name="password" placeholder="Password">
-        <input class="form-control" type="email" name="email" placeholder="your@email.com">
-        <button class="btn btn-primary" type="submit">Register</button>
+    <h1>Register</h1>
+    <form role="form" name="register" ng-submit="register.$valid && validNewUser() && submitNewUser()" novalidate>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" name="username" ng-model="username" placeholder="Enter Username" required>
+
+        </div>
+
+        <div class="form-group">
+            <label for="password1">Password</label>
+            <input class="form-control" type="password" name="password1" placeholder="Enter Password" ng-model="pass1" ng-change="checkValidPassword()" required>
+        </div> 
+        
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input class="form-control" type="password" name="password2" ng-model="pass2" placeholder="Enter Password Again" ng-change="checkValidPassword()" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="email" name="email" ng-model="email" placeholder="your@email.com" required>
+        </div>
+        
+        <input class="btn btn-primary" type="submit" value="Submit">
     </form>
 
     <a href="#/home">Back</a>
