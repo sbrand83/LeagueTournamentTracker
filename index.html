@@ -15,7 +15,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarController">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
@@ -23,13 +23,27 @@
                 </a>
                 <h1 class="navbar-text">League of Legends Tournament Tracker</h1>
             </div>
-            <form class="navbar-form navbar-right" ng-controller="RegisterController" >
-                <input type="text" class="form-control" placeholder="Username">
-                <input type="password" class="form-control" placeholder="Password">
-                <button type="submit" class="btn btn-default">Login</button>
+
+
+            
+
+            <form role="form" name="login" class="navbar-form navbar-right" ng-submit="login.$valid && loginUser()" novalidate>
+                <input type="text" class="form-control" ng-model="username" placeholder="Username" required>
+                <input type="password" class="form-control" ng-model="password" placeholder="Password" required>
+                <input type="submit" value="Login" class="btn btn-default">
                 <button class="btn btn-default" ng-click="redirectToRegister();">Register</button>
             </form>
-        </div><!-- /.container-fluid -->
+
+            <div class="navbar-right">
+                <div class="alert alert-danger" role="alert" ng-show="isFailure()">
+                    Incorrect login. Please check username and password.
+                </div>
+
+                <div class="alert alert-success" role="alert" ng-show="isSuccessful()">
+                    You have successfully logged in!
+                </div>
+            </div>
+        </div>
     </nav>
 
     <ng-view></ng-view>

@@ -1,7 +1,7 @@
 (function(){
     var app = angular.module("data-services", []);
 
-    app.service("DataSource", ['$http', function($http){
+    app.service("UserData", ['$http', function($http){
         this.checkNewUser = function(callback, username, email){
             $http({method: "GET", url: "php/data.php", params: {type: 'user', username: username, email: email}})
             .then(function(responce){
@@ -34,10 +34,17 @@
             }, function(responce){
                 console.log("Failed to add new user.");
             });
-            
-
-            
         };
+
+        this.loginUser = function(callback, username, password){
+            $http({method: "GET", url: "php/data.php", params: {type: 'login', username: username, password: password}})
+            .then(function(responce){
+                callback(responce.data);
+            }, function(responce){
+                console.log("Failure");
+            });
+        };
+
     }]);
 
 })();

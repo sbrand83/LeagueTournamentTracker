@@ -28,7 +28,7 @@
         };
     });
 
-    app.controller('RegisterController', ['$http', '$location', 'DataSource', '$scope', function($http, $location, DataSource, $scope){
+    app.controller('RegisterController', ['$http', '$location', 'UserData', '$scope', function($http, $location, UserData, $scope){
         console.log("register");
 
         $scope.users = [];
@@ -37,12 +37,16 @@
         $scope.username = '';
         $scope.email = '';
 
+        $scope.success = false;
+        $scope.failure = false;
+        $scope.dupPass = true;
+
         $scope.validNewUserReturned = false;
 
         $scope.validNewUser = function(){
             console.log("valid new user");
             //var valid = false;
-            DataSource.checkNewUser(function(data){
+            UserData.checkNewUser(function(data){
             $scope.users = data;
             console.log('controller getting data');
             console.log('checking username: ' + $scope.username + ' and email: ' + $scope.email);
@@ -51,6 +55,12 @@
             // console.log(data[0].email);
             if($scope.users.length !== 0){
                 console.log('found user with that email or username');
+                $scope.pass1 = '';
+                $scope.pass2 = '';
+                $scope.username = '';
+                $scope.email = '';
+                $scope.resetAlerts();
+                $scope.failure = true;
                 return false;
             }
 
@@ -66,28 +76,87 @@
 
         
 
-        $scope.redirectToRegister = function(){
-            $location.url("/register");
-        };
+        
 
         $scope.checkValidPassword = function(){
             if($scope.pass1 !== $scope.pass2){
                 console.log('Passwords do not match.');
+                $scope.resetAlerts();
+                $scope.dupPass = false;
                 return false;
             } else {
                 console.log('Passwords match');
+                $scope.resetAlerts();
                 return true;
             }
         };
 
         $scope.submitNewUser = function(){
             console.log("new user");
-            DataSource.addNewUser($scope.username, $scope.email, $scope.pass1);
+            UserData.addNewUser($scope.username, $scope.email, $scope.pass1);
 
             $scope.pass1 = '';
             $scope.pass2 = '';
             $scope.username = '';
             $scope.email = '';
+            $scope.resetAlerts();
+            $scope.success = true;
+        };
+
+        $scope.isSuccessful = function(){
+            return $scope.success;
+        };
+
+        $scope.isFailure = function(){
+            return $scope.failure;
+        };
+
+        $scope.isValidPassword = function(){
+            return $scope.dupPass;
+        };
+
+        $scope.resetAlerts = function(){
+            $scope.success = false;
+            $scope.failure = false;
+            $scope.dupPass = true;
+        };
+
+    }]);
+
+    app.controller('NavbarController', ['$http', '$location', 'UserData', '$scope', function($http, $location, UserData, $scope){
+
+        $scope.username = '';
+        $scope.password = '';
+        $scope.success = false;
+        $scope.failed = false;
+
+        $scope.loginUser = function(){
+            console.log('login function');
+            UserData.loginUser(function(data){
+                console.log('login returned');
+                console.log(data);
+                if(data.length === 0){
+                    console.log('login failed');
+                    $scope.failed = true;
+                    $scope.success = false;
+                } else {
+                    console.log('login success');
+                    $scope.failed = false;
+                    $scope.success = true;
+                }
+            }, $scope.username, $scope.password);
+        };
+
+        $scope.redirectToRegister = function(){
+            $location.url("/register");
+        };
+
+        $scope.isFailure = function(){
+            return $scope.failed;
+        };
+
+        $scope.isSuccessful = function(){
+            return $scope.success;
         };
 
     }]);
