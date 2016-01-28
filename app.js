@@ -37,9 +37,12 @@
         $scope.username = '';
         $scope.email = '';
 
+        $scope.validNewUserReturned = false;
+
         $scope.validNewUser = function(){
             console.log("valid new user");
-            return DataSource.checkNewUser(function(data){
+            //var valid = false;
+            DataSource.checkNewUser(function(data){
             $scope.users = data;
             console.log('controller getting data');
             console.log('checking username: ' + $scope.username + ' and email: ' + $scope.email);
@@ -50,9 +53,14 @@
                 console.log('found user with that email or username');
                 return false;
             }
+
+            console.log('can add this user');
+            $scope.submitNewUser();
             return true;
             }, $scope.username, $scope.email);
 
+            //console.log('Returning from controller: ' + valid);
+            //return valid;
 
         };
 
@@ -65,13 +73,21 @@
         $scope.checkValidPassword = function(){
             if($scope.pass1 !== $scope.pass2){
                 console.log('Passwords do not match.');
+                return false;
             } else {
                 console.log('Passwords match');
+                return true;
             }
         };
 
         $scope.submitNewUser = function(){
             console.log("new user");
+            DataSource.addNewUser($scope.username, $scope.email, $scope.pass1);
+
+            $scope.pass1 = '';
+            $scope.pass2 = '';
+            $scope.username = '';
+            $scope.email = '';
         };
 
     }]);
