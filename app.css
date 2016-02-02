@@ -18,3 +18,22 @@ body { padding-top: 95px; }
 .navbar-brand {
     padding: 0px;
 }
+
+.center {
+    width: 70%;
+    text-align: center;
+    margin: auto;
+}
+
+.big-label {
+    font-size: 18pt;   
+}
+
+h1,h2 {
+    color: #49AFEA;
+}
+
+.navbar-color {
+    color:#FFFFFF ! important;
+    margin-top: 5px;
+}
