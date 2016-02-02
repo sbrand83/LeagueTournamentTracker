@@ -15,6 +15,10 @@
                 templateUrl: 'views/register.html',
                 controller: "RegisterController"
             })
+            .when('/tournament', {
+                templateUrl: 'views/view-tournament.html',
+                controller: "TournamentController"
+            })
             .otherwise({
                 redirectTo: '/home'
             });
@@ -160,4 +164,38 @@
         };
 
     }]);
+
+    app.controller("TournamentController", function($scope){
+        console.log("tournament controller");
+
+        $scope.simple_chart_config = {
+                chart: {
+                    container: "#tree-simple"
+                },
+
+                nodeStructure: {
+                    text: {
+                        name: "Parent node"
+                    },
+                    children: [
+                        {
+                            text: {
+                                name: "First child"
+                            }
+            },
+                        {
+                            text: {
+                                name: "Second child"
+                            }
+            }
+        ],
+                    connectors: {
+                        type: "step"
+                    },
+                    collapsable: true
+                }
+            };
+
+        var myChart = new Treant($scope.simple_chart_config);
+    });
 })();
