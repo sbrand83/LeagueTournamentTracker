@@ -47,4 +47,30 @@
 
     }]);
 
+    app.service("LoggedInUser", function(){
+        var loggedInUser = null; //jcurrently logged in user
+
+        this.setLoggedInUser = function(username){ //can be null for no current logged in user
+            loggedInUser = username;
+            //console.log('setLoggedInUser');
+        };
+
+        this.getLoggedInUser = function(){
+            //console.log('getLoggedInUser');
+            return loggedInUser; //returns username of user
+        };
+    });
+
+    app.service("TournamentData", function(){
+        this.getTournaments = function(callback, username){
+            console.log('service get tournaments');
+            $http({method: "GET", url: "php/data.php", params: {type: 'tournament', username: username}})
+            .then(function(responce){
+                callback(responce.data);
+            }, function(responce){
+                console.log("Failure");
+            });
+        };
+    });
+
 })();

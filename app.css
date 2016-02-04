@@ -37,3 +37,7 @@ h1,h2 {
     color:#FFFFFF ! important;
     margin-top: 5px;
 }
+
+#tourny_sidebar {
+    min-height: 80%;
+}
