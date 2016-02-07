@@ -61,16 +61,30 @@
         };
     });
 
-    app.service("TournamentData", function(){
+    app.service("TournamentData", ['$http', function($http){
         this.getTournaments = function(callback, username){
             console.log('service get tournaments');
-            $http({method: "GET", url: "php/data.php", params: {type: 'tournament', username: username}})
+            $http({method: "GET", url: "php/data.php", params: {type: 'tournament', username: 'a'}})
             .then(function(responce){
+                console.log(responce.data);
                 callback(responce.data);
             }, function(responce){
                 console.log("Failure");
             });
         };
-    });
+    }]);
+
+    app.service("TeamData", ['$http', function($http){
+        this.getTeam = function(callback, name){
+            console.log('service get teams');
+            $http({method: "GET", url: "php/data.php", params: {type: 'team', name: name}})
+            .then(function(responce){
+                console.log(responce.data);
+                callback(responce.data);
+            }, function(responce){
+                console.log("Failure");
+            });
+        };
+    }]);
 
 })();

@@ -1,37 +1,42 @@
 <div class="container-fluid">
-    <div class="col-md-8 text-center">
-        <h1>LOLTT</h1>
+    
 
-        <h2>INFO PAGE</h2>
+    <div class="row">
+        <div class="col-md-8 text-center">
+            <h1>LOLTT</h1>
 
-        <p>Maybe write up a description of what the app does/ why you would want to use it.</p>
+            <h2>Create and manage your own League of Legends tournaments.</h2>
 
-        <a href="#/create-tournament" type="button" class="btn btn-primary">Create Tournament</a>
-        <a href="#/register" type="button" class="btn btn-primary">Register</a>
+            <p>Maybe write up a description of what the app does/ why you would want to use it.</p>
+
+            <a href="#/create-tournament" type="button" class="btn btn-primary">Create Tournament</a>
+            <a href="#/register" type="button" class="btn btn-primary">Register</a>
+            </div>
+
+            <div class="col-md-4 well" id="tourny_sidebar">
+            <h2>Managed Tournaments<h3>
+
+            <div ng-hide="isLoggedIn()">
+                <p>You are not currently logged in as a user.  Please login to manage your tournaments.</p>
+            </div>
+
+            <div ng-show="isLoggedIn()">
+                <table class="table table-striped table-hover">
+                    <caption>Tournaments</caption>
+                    <thead>
+                        <tr>
+                            <th>Name</th><th>ID</th><th>Teams</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="tournament in tournaments">
+                            <td>{{tournament.Name}}</td><td>{{tournament.Tournament_ID}}</td><td>team1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-4 well" id="tourny_sidebar">
-        <h2>Managed Tournaments<h3>
-
-        <div ng-hide="isLoggedIn()">
-            <p>You are not currently logged in as a user.  Please login to manage your tournaments.</p>
-        </div>
-
-        <div ng-show="isLoggedIn()">
-            <table class="table table-striped table-hover">
-                <caption>Tournaments</caption>
-                <thead>
-                    <tr>
-                        <th>Name</th><th>ID</th><th>Teams</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>tourny 1</td><td>123456789</td><td>team1</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
     

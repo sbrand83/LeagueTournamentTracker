@@ -48,6 +48,18 @@
             }
 
             echo json_encode($tournaments_json);
+        } else if($_GET['type'] == 'team'){
+            $name = mysqli_real_escape_string($conn, $_GET['name']);
+            
+            $teams = mysqli_query($conn, "SELECT Username FROM player WHERE Team_ID = (SELECT Team_ID FROM team WHERE Name ='" . $name . "');");
+
+            $teams_json = [];
+
+            while($row = mysqli_fetch_assoc($teams)){
+                array_push($teams_json, $row);
+            }
+
+            echo json_encode($teams_json);
         }
          
     } else if($_SERVER['REQUEST_METHOD'] == 'POST'){

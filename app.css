@@ -1,4 +1,7 @@
-body { padding-top: 95px; }
+body { 
+    padding-top: 95px; 
+    padding-bottom: 95px;
+}
 
 #numTeamsInput {
     width: 20%;
@@ -25,9 +28,9 @@ body { padding-top: 95px; }
     margin: auto;
 }
 
-.big-label {
+/*.big-label {
     font-size: 18pt;   
-}
+}*/
 
 h1,h2 {
     color: #49AFEA;
@@ -41,3 +44,12 @@ h1,h2 {
 #tourny_sidebar {
     min-height: 80%;
 }
+
+table {
+    font-size: smaller;
+}
+
+.smaller-text {
+    font-size: 100%;
+ }
+

@@ -1,25 +1,48 @@
-<div class="center">
+<div class="center container">
     <h1>CREATE A TOURNAMENT!</h1>
     <div ng-hide="isLoggedIn()">
         <p>You are not currently logged in as a user.  Please login to create a tournament.</p>
     </div>
     
-    <form name="create-tournament" role="form" ng-show="isLoggedIn()">
-        <div class="form-group">
-            <label class="big-label">Number of Teams</label>
-            <input type="number" min="2" max="64" step="1" class="form-control center" ng-init="numTeams=2" ng-model="numTeams" id="numTeamsInput">
+    <form name="tournament" role="form" ng-show="isLoggedIn()" ng-submit="tournament.$valid && createTournament()" novalidate>
+    
+        <div class="row">
+            <div class="form-group col-md-4 col-md-offset-2">
+                <label class="big-label">Tournament Name</label>
+                <input type="text" placeholder="Enter tournament name"class="form-control center" ng-model="name" required>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="big-label">Number of Teams</label>
+                <input type="number" min="2" max="64" step="1" class="form-control center" ng-init="numTeams=2" ng-model="numTeams" id="numTeamsInput" required>
+            </div>
         </div>
         
-        <div ng-repeat="i in getNumber(numTeams) track by $index" class="form-group form-inline">
-            <label class="big-label">Team {{$index + 1}}</label><br />
-            <span ng-repeat="p in getNumber(5) track by $index" class="form-group">
-                <label>Player {{$index + 1}}:</label>
-                <input type="text" placeholder="Enter player name" class="form-control">
-            </span>
+        
+        <div ng-repeat="i in getNumber(numTeams) track by $index" class="form-group form-inline row well well-sm" >
+            <div ng-model="teams[$index]">
+                <div class="form-group" >
+                    <label class="big-label">Team Name:</label>
+                    <input type="text" placeholder="Team {{$index + 1}}" class="form-control" ng-model="teams[$index].teamName" ng-change="getTeamPlayers($index, teams[$index].teamName)" required>
+                </div>
+            
+                <br />
+                <span ng-repeat="p in getNumber(5) track by $index" class="form-group col-md-4">
+                    <label>Player {{$index + 1}}:</label>
+                    <input type="text" placeholder="Enter player name" class="form-control" ng-model="teams[$parent.$index].players[$index]" ng-disabled="isExisting($parent.$index)" required>
+                </span>
+            </div>
+            
         </div>
         
-        <input type="submit" value="Create Tournament" class="btn btn-primary">
+        <div class="row">
+            <input type="submit" value="Create Tournament" class="btn btn-primary col-md-4 col-md-offset-4">{{tournament.$valid}}
+        </div>
+        
     </form>
     </br>
-    <a href="#/home">Back</a>
+    <div class="row col-md-offset-4 col-md-4">
+        <a href="#/home" class="">Back</a>
+    </div>
+    
 </div>

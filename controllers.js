@@ -1,18 +1,46 @@
 (function(){
     var app = angular.module("Controllers", []);
 
-    app.controller("HomeController", ['$scope', 'LoggedInUser', 'TournamentData', function($scope, LoggedInUser, TournamentData){
+    app.controller("HomeController", ['$scope', 'LoggedInUser', 'TournamentData', '$interval', function($scope, LoggedInUser, TournamentData, $interval){
+        $scope.tournaments = {};
+
         $scope.isLoggedIn = function(){
-            return LoggedInUser.getLoggedInUser() !== null;
+            if(LoggedInUser.getLoggedInUser() !== null){
+                //$scope.getUserTournaments();
+                return true;
+            }else{
+                return false;
+            }
+            //return LoggedInUser.getLoggedInUser() !== null;
         };
 
         $scope.getUserTournaments = function(){
-            TournamentData.getTournaments(LoggedInUser.getLoggedInUser());
+            console.log(LoggedInUser.getLoggedInUser());
+            if(LoggedInUser.getLoggedInUser() !== null){
+                console.log('get tournament data: controller');
+                TournamentData.getTournaments(function(data){
+                    console.log('Controller: '+ data);
+                    $scope.tournaments = data;
+                }, LoggedInUser.getLoggedInUser());
+            }else{
+                console.log('not logged in, didnt get tournament');
+            }
+            
         };
+
+        $interval($scope.getUserTournaments, 5000);
     }]);
 
-    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', function($scope, LoggedInUser){
+    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', function($scope, LoggedInUser, TeamData){
         console.log("create-tournament");
+
+        $scope.teams = [];
+
+        $scope.duplicateTeam = false;
+        $scope.duplicatePlayer = false;
+        
+        // $scope.player
+        
 
         $scope.getNumber = function(num) {
             return new Array(num);   
@@ -21,6 +49,68 @@
         $scope.isLoggedIn = function(){
             return LoggedInUser.getLoggedInUser() !== null;
         };
+
+        $scope.getTeamPlayers = function(formNum, name){
+            console.log('name: ' +name);
+            if(name !== "" && name !== undefined){
+                TeamData.getTeam(function(data){
+                    console.log('got team data in controller');
+                    console.log('formNum' + formNum);
+                    console.log(data);
+                    $scope.teams[formNum].players = [];
+                    if(data.length > 0){
+                        for(var i = 0; i < 5; i++){
+                            console.log(data[i].Username);
+                            $scope.teams[formNum].players.push(data[i].Username);
+                        }
+                    }
+                }, name);
+            }else{
+                //if name is undefined or an empty string then reset all player fields
+                $scope.teams[formNum].players = [];
+            }
+            
+            // for(var i = 0; i < 5; i++){
+            //     console.log($scope.teams[0]);
+            // }
+        };
+
+        $scope.isExisting = function(teamNum){
+            return false;
+        };
+
+        $scope.createTournament = function(){
+            console.log('create tournament');
+        };
+
+        $scope.uniqueTeamsAndPlayers = function(){
+            $scope.duplicateTeam = false;
+            $scope.duplicatePlayer = false;
+            console.log('uniqueTeamsAndPlayers');
+            var teamsFound = [];
+            var playersFound = [];
+            for(var i = 0; i < $scope.teams.length; i++){
+                if(teamsFound.indexOf($scope.teams[i].teamName) > -1){
+                    //team already in array
+                    $scope.duplicateTeam = true;
+                    return false;
+                } else {
+                    teamsFound.push($scope.teams[i].teamName);
+
+                    for(var n = 0; n < $scope.teams[i].players.length; n++){
+                        if(playersFound.indexOf($scope.teams[i].players[n] > -1)){
+                            //player already in array (duplicate)
+                            $scope.duplicatePlayer = true;
+                            return false;
+                        } else {
+                            playersFound.push($scope.teams[i].players[n]);
+                        }
+                    }
+                }
+            }
+            return true;
+        };
+
     }]);
 
     app.controller('RegisterController', ['$http', '$location', 'UserData', '$scope', function($http, $location, UserData, $scope){
