@@ -1,5 +1,43 @@
-body { padding-top: 70px; }
+body { padding-top: 95px; }
 
 #numTeamsInput {
     width: 20%;
+}
+
+#register-div {
+    width: 50%;
+    margin: auto;
+}
+
+.navbar {
+    height: 75px;
+    padding: 10px;
+    /*background-color: black;*/
+}
+
+.navbar-brand {
+    padding: 0px;
+}
+
+.center {
+    width: 70%;
+    text-align: center;
+    margin: auto;
+}
+
+.big-label {
+    font-size: 18pt;   
+}
+
+h1,h2 {
+    color: #49AFEA;
+}
+
+.navbar-color {
+    color:#FFFFFF ! important;
+    margin-top: 5px;
+}
+
+#tourny_sidebar {
+    min-height: 80%;
 }

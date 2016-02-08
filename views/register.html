@@ -1,0 +1,43 @@
+<div id="register-div">
+    <h1>Register</h1>
+
+    <div class="alert alert-success" role="alert" ng-show="isSuccessful()">
+        You have successfully been registered!
+    </div>
+
+    <div class="alert alert-danger" role="alert" ng-show="isFailure()">
+        The username or email are unavaliable.  Please choose a different username or email. (this needs to be better)
+    </div>
+
+
+    <form role="form" name="register" ng-submit="register.$valid && checkValidPassword() && validNewUser() && submitNewUser()" novalidate>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" name="username" ng-model="username" placeholder="Enter Username" required>
+
+        </div>
+
+        <div class="alert alert-warning" role="alert" ng-hide="isValidPassword()">
+            The passwords have to match.
+        </div>
+
+        <div class="form-group">
+            <label for="password1">Password</label>
+            <input class="form-control" type="password" name="password1" placeholder="Enter Password" ng-model="pass1" ng-change="checkValidPassword()" required>
+        </div> 
+        
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input class="form-control" type="password" name="password2" ng-model="pass2" placeholder="Enter Password Again" ng-change="checkValidPassword()" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="email" name="email" ng-model="email" placeholder="your@email.com" required>
+        </div>
+        
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    </br>
+    <a href="#/home">Back</a>
+</div>
