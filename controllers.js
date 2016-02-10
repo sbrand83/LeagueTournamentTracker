@@ -31,15 +31,15 @@
         $interval($scope.getUserTournaments, 5000);
     }]);
 
-    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', function($scope, LoggedInUser, TeamData){
+    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', 'TournamentData', 'ParticipatesInData', function($scope, LoggedInUser, TeamData, TournamentData, ParticipatesInData){
         console.log("create-tournament");
-
+        $scope.numberOfTeams = 2;
         $scope.teams = [];
+        $scope.name = '';
 
         $scope.duplicateTeam = false;
         $scope.duplicatePlayer = false;
         
-        // $scope.player
         
 
         $scope.getNumber = function(num) {
@@ -52,13 +52,15 @@
 
         $scope.getTeamPlayers = function(formNum, name){
             console.log('name: ' +name);
+            $scope.teams[formNum].exists = false;
             if(name !== "" && name !== undefined){
-                TeamData.getTeam(function(data){
+                TeamData.getTeamPlayers(function(data){
                     console.log('got team data in controller');
                     console.log('formNum' + formNum);
                     console.log(data);
                     $scope.teams[formNum].players = [];
                     if(data.length > 0){
+                        $scope.teams[formNum].exists = true;
                         for(var i = 0; i < 5; i++){
                             console.log(data[i].Username);
                             $scope.teams[formNum].players.push(data[i].Username);
@@ -76,11 +78,33 @@
         };
 
         $scope.isExisting = function(teamNum){
+            if($scope.teams[teamNum] !== undefined)
+                return $scope.teams[teamNum].exists;
             return false;
         };
 
         $scope.createTournament = function(){
             console.log('create tournament');
+
+            //create tournament associated with the user (manager) and name
+            TournamentData.createTournament($scope.name, LoggedInUser.getLoggedInUser(), function(){
+                //for all the non-existing teams, add the team to db and all the players if they are not already in the db
+                $scope.teams.forEach(function(currentValue, index, array){
+                    //if team doesn't exist yet, add it to db
+                    console.log('team: ' + currentValue.teamName);
+                    if(!currentValue.exists){
+                        console.log('create team');
+                        TeamData.createTeam(currentValue.teamName, function(){
+                            //add team and tournament to participates_in table
+                            ParticipatesInData.addParticipants(currentValue.teamName, $scope.name);
+                        });
+                    }else{
+                        ParticipatesInData.addParticipants(currentValue.teamName, $scope.name);
+                    }
+                });
+            });
+
+            $location.url("/tournament");
         };
 
         $scope.uniqueTeamsAndPlayers = function(){
@@ -92,14 +116,16 @@
             for(var i = 0; i < $scope.teams.length; i++){
                 if(teamsFound.indexOf($scope.teams[i].teamName) > -1){
                     //team already in array
+                    console.log('duplicateTeam');
                     $scope.duplicateTeam = true;
                     return false;
                 } else {
                     teamsFound.push($scope.teams[i].teamName);
 
                     for(var n = 0; n < $scope.teams[i].players.length; n++){
-                        if(playersFound.indexOf($scope.teams[i].players[n] > -1)){
+                        if(playersFound.indexOf($scope.teams[i].players[n]) > -1){
                             //player already in array (duplicate)
+                            console.log('duplicatePlayer');
                             $scope.duplicatePlayer = true;
                             return false;
                         } else {

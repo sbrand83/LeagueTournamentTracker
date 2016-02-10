@@ -4,7 +4,7 @@
         <p>You are not currently logged in as a user.  Please login to create a tournament.</p>
     </div>
     
-    <form name="tournament" role="form" ng-show="isLoggedIn()" ng-submit="tournament.$valid && createTournament()" novalidate>
+    <form name="tournament" role="form" ng-show="isLoggedIn()" ng-submit="tournament.$valid && uniqueTeamsAndPlayers() && createTournament()" novalidate>
     
         <div class="row">
             <div class="form-group col-md-4 col-md-offset-2">
@@ -37,6 +37,14 @@
         
         <div class="row">
             <input type="submit" value="Create Tournament" class="btn btn-primary col-md-4 col-md-offset-4">{{tournament.$valid}}
+
+            <div class="alert alert-success" role="alert" ng-show="isSuccessful()">
+                You have successfully created the tournament!
+            </div>
+
+            <div class="alert alert-danger" role="alert" ng-show="isFailure()">
+                Tournament creation failed.
+            </div>
         </div>
         
     </form>
