@@ -176,4 +176,23 @@
         };
     }]);
 
+    app.service('LeagueData', ['$http', function($http){
+        var prefix = 'https://na.api.pvp.net/api/lol/na/v1.4/';
+
+        var api_key = '?api_key=e04d7dac-9076-4477-bc79-569bf28d4ae3';
+
+        this.getSummonerNames = function(namesArray, callback){
+            var type = 'summoner/by-name/';
+            var paramString = namesArray.join(",");
+            var url = prefix + type + paramString + api_key;
+            $http({method: 'GET', url: url})
+            .then(function(responce){
+                console.log("success");
+                callback(responce.data);
+            }, function(responce){
+                console.log('failure');
+            });
+        };  
+    }]);
+
 })();

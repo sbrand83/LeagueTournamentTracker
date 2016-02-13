@@ -31,11 +31,18 @@
         $interval($scope.getUserTournaments, 5000);
     }]);
 
-    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', 'TournamentData', 'ParticipatesInData', function($scope, LoggedInUser, TeamData, TournamentData, ParticipatesInData){
+    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', 'TournamentData', 'ParticipatesInData', 'LeagueData' , function($scope, LoggedInUser, TeamData, TournamentData, ParticipatesInData, LeagueData){
         console.log("create-tournament");
         $scope.numberOfTeams = 2;
         $scope.teams = [];
         $scope.name = '';
+
+        //initialize team form information
+        for(var n = 0; n < $scope.numberOfTeams; n++){
+            $scope.teams[n] = {};
+            $scope.teams[n].validateDisabled = false;
+            $scope.teams[n].players = [];
+        }
 
         $scope.duplicateTeam = false;
         $scope.duplicatePlayer = false;
@@ -107,7 +114,7 @@
             $location.url("/tournament");
         };
 
-        $scope.uniqueTeamsAndPlayers = function(){
+        $scope.validateTeamsAndPlayers = function(){
             $scope.duplicateTeam = false;
             $scope.duplicatePlayer = false;
             console.log('uniqueTeamsAndPlayers');
@@ -134,8 +141,104 @@
                     }
                 }
             }
+
+            var uncheckedTeams = [];
+
+            for(i = 0; i < $scope.teams.length; i++){
+                //if the team has already been validated, continue. If it is not valid or hasn't been validated, 
+                //then check one more time (this is for people who didn't click 'Verify Players' button on a team)
+                
+                
+                //if team already exists, assume it has valid summoner names (this is a bad assumption.  
+                //omeones account could have been deleted and no long valid)
+                if($scope.teams[i].playersValidated || $scope.teams[i].exists){
+                    continue;
+                }else{
+                    uncheckedTeams.push(i);
+                    //check if players are real summoners
+                    //$scope.validateSummonerNames(i);
+                    //if not return false
+                    // if(!$scope.teams[i].playersValidated){
+                    //     console.log("invalid summoners on form submit");
+                    //     return false;
+                    // }
+                }
+            }
+
+            $scope.validateSummonerNames(uncheckedTeams);
+
             return true;
         };
+
+        $scope.validateSummonerNames = function(indexArray){
+            console.log('checkSummonerNames');
+            console.log(indexArray);
+
+            var players = [];
+
+            for(var i = 0; i < indexArray.length; i++){
+                console.log(indexArray[i]);
+                console.log($scope.teams[indexArray[i]].players.length);
+                for(var k = 0; k < $scope.teams[indexArray[i]].players.length; k++){
+                    $scope.teams[indexArray[i]].validateDisabled = true;
+                    console.log($scope.teams[indexArray[i]].players);
+                    players.push($scope.teams[indexArray[i]].players[k]);
+                }
+            }
+
+            console.log('players in validateSummonerNames: ' + players);
+
+
+            LeagueData.getSummonerNames(players, function(data){
+                console.log(data);
+                //$scope.teams[index].validateDisabled = false;
+
+                //enable all the 'verify players' button
+                for(var i = 0; i < indexArray.length; i++){
+                    console.log($scope.teams[indexArray[i]].players.length);
+                    for(var k = 0; k < $scope.teams[indexArray[i]].players.length; k++){
+                        $scope.teams[indexArray[i]].validateDisabled = false;
+                        console.log($scope.teams[indexArray[i]].players);
+                    }
+                }
+
+                //the api just doesn't return anything if no infomation if found.  So if there is less than 5 per each index of team responces, 
+                //then not all of the players were found to be real
+                console.log('data.length ' + Object.keys(data).length);
+                if(Object.keys(data).length < (5 * indexArray.length)){
+                    console.log('summoner validation failed');
+                    for(i = 0; i < indexArray.length; i++){
+                        console.log($scope.teams[indexArray[i]].players.length);
+                        for(var n = 0; n < $scope.teams[indexArray[i]].players.length; n++){
+                            $scope.teams[indexArray[i]].playersValidated = false;
+                            console.log($scope.teams[indexArray[i]].players);
+                        }
+                    }
+                    return false;
+                    //$scope.teams[index].playersValidated = false;
+                } else {
+                    //$scope.teams[index].playersValidated = true;
+                    for(i = 0; i < indexArray.length; i++){
+                        console.log($scope.teams[indexArray[i]].players.length);
+                        for(var m = 0; m < $scope.teams[indexArray[i]].players.length; m++){
+                            $scope.teams[indexArray[i]].playersValidated = true;
+                            console.log($scope.teams[indexArray[i]].players);
+                        }
+                    }
+                    return  true;
+                }
+            });
+        };
+
+        $scope.isDisabled = function(index){
+            if($scope.teams[index] === undefined){
+                return false;
+            }else{
+                return $scope.teams[index].validateDisabled;
+            }
+        };
+
+        //$scope.checkSummonerNames();
 
     }]);
 
