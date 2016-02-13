@@ -46,6 +46,8 @@
 
         $scope.duplicateTeam = false;
         $scope.duplicatePlayer = false;
+
+        $scope.validTeamAndPlayers = false;
         
         
 
@@ -165,12 +167,32 @@
                 }
             }
 
-            $scope.validateSummonerNames(uncheckedTeams);
+            if(uncheckedTeams.length === 0){
+                return true;
+            }
 
-            return true;
+            // var waitFunction = function(){
+            //     returnValue = $scope.validateSummonerNames(uncheckedTeams);
+            // };
+
+            var returnValue = $scope.validateSummonerNames(uncheckedTeams);
+            // var interval = null;
+            // while(returnValue === undefined){
+            //     interval = setInterval(waitFunction, 100);
+            // }
+            //clearInterval(interval);
+            console.log('validateTeamsAndPlayers return value: ' + returnValue);
+            //return returnValue;
+
+
+            //return true;
         };
 
-        $scope.validateSummonerNames = function(indexArray){
+        $scope.validateSummonerNames = function(indexArray, cheekAll){
+            if(indexArray.length === 0){
+                return false;
+            }
+
             console.log('checkSummonerNames');
             console.log(indexArray);
 
@@ -214,6 +236,9 @@
                             console.log($scope.teams[indexArray[i]].players);
                         }
                     }
+                    if(checkAll){
+                        $scope.validTeamAndPlayers = false;
+                    }
                     return false;
                     //$scope.teams[index].playersValidated = false;
                 } else {
@@ -225,7 +250,10 @@
                             console.log($scope.teams[indexArray[i]].players);
                         }
                     }
-                    return  true;
+                    if(checkAll){
+                        $scope.validTeamAndPlayers = true;
+                    }
+                    return true;
                 }
             });
         };
