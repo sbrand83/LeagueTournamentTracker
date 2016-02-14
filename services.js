@@ -195,4 +195,41 @@
         };  
     }]);
 
+    app.service("PlayerData", ['$http', function($http){
+        this.getPlayer = function(callback, player){
+            //console.log('service get participants');
+            $http({method: "GET", url: "php/data.php", params: {type: 'player', username: player}})
+            .then(function(responce){
+                console.log(responce.data);
+                callback(responce.data);
+            }, function(responce){
+                console.log("Failure");
+            });
+        };
+
+        this.createPlayer = function(player_name, team_name){
+            var data = {
+                'type': 'player',
+                'player_name': player_name,
+                'team_name': team_name
+            };
+
+            console.log('Data: ' + data);
+
+            $http({method: "POST", url: "php/data.php", headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                }, data: data })
+            .then(function(responce){
+                console.log("Successfully created player.");
+                console.log(responce.data);
+            }, function(responce){
+                console.log("Failed to add player.");
+            });
+        };
+    }]);
+
 })();

@@ -4,7 +4,7 @@
         <p>You are not currently logged in as a user.  Please login to create a tournament.</p>
     </div>
     
-    <form name="tournament" role="form" ng-show="isLoggedIn()" ng-submit="tournament.$valid && validTeamsAndPlayers && createTournament()" novalidate>
+    <form name="tournament" role="form" ng-show="isLoggedIn()" ng-submit="tournament.$valid && validateTeamsAndPlayers()" novalidate>
     
         <div class="row">
             <div class="form-group col-md-4 col-md-offset-2">
@@ -19,7 +19,7 @@
         </div>
         
         
-        <div ng-repeat="i in getNumber(numTeams) track by $index" class="form-group form-inline row well well-sm " >
+        <div ng-repeat="i in getNumber(numTeams) track by $index" class="form-group form-inline row well well-sm ">
             <div ng-model="teams[$index]">
                 <div class="form-group" >
                     <label class="big-label">Team Name:</label>

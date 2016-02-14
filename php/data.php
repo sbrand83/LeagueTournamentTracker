@@ -60,6 +60,19 @@
             }
 
             echo json_encode($teams_json);
+
+        } else if($_GET['type'] == 'player'){
+            $username = mysqli_real_escape_string($conn, $_GET['username']);
+
+            $players = mysqli_query($conn, "SELECT Username, Team_ID FROM player WHERE Username ='" . $username . "';");
+
+            $players_json = [];
+
+            while($row = mysqli_fetch_assoc($players)){
+                array_push($players_json, $row);
+            }
+
+            echo json_encode($players_json);
         }
          
     } else if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -120,6 +133,33 @@
 
             mysqli_query($conn, "INSERT INTO participates_in (Team_ID, Tournament_ID) VALUES (" 
                 . $team_id . ", " . $tournament_id . ");") or die('error');
+
+        } else if($_POST['type'] == 'player'){
+            $team_name = mysqli_real_escape_string($conn, $_POST['team_name']);
+            $player_name = mysqli_real_escape_string($conn, $_POST['player_name']);
+
+            $team_ids = mysqli_query($conn, "SELECT Team_ID FROM team WHERE Name = '" . $team_name . "';");
+            #print $team_id;
+            #$tournament_ids = mysqli_query($conn, "SELECT Tournament_ID FROM tournament WHERE Name = '" . $tournament_name . "';");
+            #print $tournament_id;
+
+            $team_id = 0;
+            #$tournament_id = 0;
+            while($row = mysqli_fetch_assoc($team_ids)){
+                $team_id = $row['Team_ID'];
+            }
+
+            print $team_id;
+            // while($row = mysqli_fetch_assoc($tournament_ids)){
+            //     $tournament_id = $row['Tournament_ID'];
+            // }
+
+            //print $tournament_id;
+            print "INSERT INTO player (Team_ID, Username) VALUES (" 
+                . $team_id . ", '" . $player_name . "');";
+
+            mysqli_query($conn, "INSERT INTO player (Team_ID, Username) VALUES (" 
+                . $team_id . ", '" . $player_name . "');") or die('error');
         }
     } 
 

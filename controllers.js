@@ -31,7 +31,7 @@
         $interval($scope.getUserTournaments, 5000);
     }]);
 
-    app.controller("CreateTournamentController", ['$scope', 'LoggedInUser', 'TeamData', 'TournamentData', 'ParticipatesInData', 'LeagueData' , function($scope, LoggedInUser, TeamData, TournamentData, ParticipatesInData, LeagueData){
+    app.controller("CreateTournamentController", ['$scope', '$location', 'LoggedInUser', 'TeamData', 'TournamentData', 'ParticipatesInData', 'LeagueData', 'PlayerData' , function($scope, $location, LoggedInUser, TeamData, TournamentData, ParticipatesInData, LeagueData, PlayerData){
         console.log("create-tournament");
         $scope.numberOfTeams = 2;
         $scope.teams = [];
@@ -106,6 +106,16 @@
                         TeamData.createTeam(currentValue.teamName, function(){
                             //add team and tournament to participates_in table
                             ParticipatesInData.addParticipants(currentValue.teamName, $scope.name);
+
+                            //add the players on the team that are not already in the database
+                            //going to just query for each name indiviually for now, but this isn't the best way probably
+                            var players = currentValue.players;
+                            var teamName = currentValue.teamName;
+                            for(var n = 0; n < currentValue.players.length; n++){
+                                PlayerData.createPlayer(players[n], teamName);
+                            }
+                            
+
                         });
                     }else{
                         ParticipatesInData.addParticipants(currentValue.teamName, $scope.name);
@@ -168,29 +178,59 @@
             }
 
             if(uncheckedTeams.length === 0){
-                return true;
+                console.log('all team players already validated');
+                $scope.createTournament();
+                //return true;
             }
 
-            // var waitFunction = function(){
-            //     returnValue = $scope.validateSummonerNames(uncheckedTeams);
+            console.log("not all players already validated");
+            var returnValue = null;
+
+            // var waitFunction = function(interval){
+            //     if(returnValue !== null){
+            //         console.log('got return value');
+            //         //clearInterval(interval);
+            //     }else{
+            //         console.log('still null');
+            //     }
+
             // };
 
-            var returnValue = $scope.validateSummonerNames(uncheckedTeams);
-            // var interval = null;
-            // while(returnValue === undefined){
-            //     interval = setInterval(waitFunction, 100);
-            // }
-            //clearInterval(interval);
-            console.log('validateTeamsAndPlayers return value: ' + returnValue);
-            //return returnValue;
+            //while(returnValue === null)
 
+            $scope.validateSummonerNames(uncheckedTeams, function(data){
+                returnValue = data;
+                console.log('Return value' + returnValue);
+                console.log('validateTeamsAndPlayers return value: ' + returnValue);
+                if(returnValue){
+                    $scope.createTournament();
+                }else{
+                    console.log("FAILED to create tournament: not all players validated");
+                }
+                
+            });
+            
+            //var interval = setInterval(waitFunction, 100);
+
+            //var count = 0;
+            // while(returnValue === null){
+            //     //wait
+            //     if(count % 100 === 0){
+            //         console.log('waiting');
+            //     }
+            // }
+
+            //clearInterval(interval);
+            
+            //return false;
 
             //return true;
         };
 
-        $scope.validateSummonerNames = function(indexArray, cheekAll){
+        $scope.validateSummonerNames = function(indexArray, callback){
             if(indexArray.length === 0){
-                return false;
+                returnValue = false;
+                callback(returnValue);
             }
 
             console.log('checkSummonerNames');
@@ -210,6 +250,7 @@
 
             console.log('players in validateSummonerNames: ' + players);
 
+            var returnValue = false;
 
             LeagueData.getSummonerNames(players, function(data){
                 console.log(data);
@@ -236,10 +277,10 @@
                             console.log($scope.teams[indexArray[i]].players);
                         }
                     }
-                    if(checkAll){
-                        $scope.validTeamAndPlayers = false;
-                    }
-                    return false;
+                    // if(checkAll){
+                    //     $scope.validTeamAndPlayers = false;
+                    // }
+                    returnValue = false;
                     //$scope.teams[index].playersValidated = false;
                 } else {
                     //$scope.teams[index].playersValidated = true;
@@ -250,11 +291,13 @@
                             console.log($scope.teams[indexArray[i]].players);
                         }
                     }
-                    if(checkAll){
-                        $scope.validTeamAndPlayers = true;
-                    }
-                    return true;
+                    // if(checkAll){
+                    //     $scope.validTeamAndPlayers = true;
+                    // }
+                    returnValue = true;
                 }
+
+                callback(returnValue);
             });
         };
 
@@ -428,7 +471,8 @@
 
         $scope.simple_chart_config = {
                 chart: {
-                    container: "#tree-simple"
+                    container: "#tree-simple",
+                    rootOrientation: 'EAST'
                 },
 
                 nodeStructure: {
@@ -450,7 +494,6 @@
                     connectors: {
                         type: "step"
                     },
-                    collapsable: true
                 }
             };
 
