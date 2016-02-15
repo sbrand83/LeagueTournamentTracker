@@ -73,7 +73,7 @@
         return returnArray.concat(findOrder(firsthalf).concat(findOrder(secondhalf)));
     }
 
-    var matches = 7;
+    var matches = 2;
     //var middle = parseInt(7/2);
 
     var numberArray = [];
@@ -98,4 +98,37 @@
     console.log(postOrder(root4));
     // 
     //console.log([0,1].slice(2, 2));
+    
+    //go throught this newly created tree and build the treant json out of it (use js object first)
+    var tree = {};
+    //one time thing at beginning
+    tree.chart = {};
+    tree.chart.container = '#tree-simple';
+
+    //start of traversing tree
+    tree.nodeStructure = {};
+
+    function buildTreantTree(root, nodeObject){
+        nodeObject.text = {name: root.number};
+        nodeObject.children = [];
+        //var str = '';
+        if(root.left !== null){
+            var childObjleft = {};
+            nodeObject.children.push(childObjleft);
+            buildTreantTree(root.left, childObjleft);
+        }
+
+        if(root.right !== null){
+            var childObjright = {};
+            nodeObject.children.push(childObjright);
+            buildTreantTree(root.right, childObjright);
+        }
+
+        return;
+    }
+
+    buildTreantTree(root4, tree.nodeStructure);
+
+    console.log(tree);
+    
 })();
